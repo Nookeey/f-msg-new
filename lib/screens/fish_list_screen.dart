@@ -75,7 +75,7 @@ class _FishListScreenState extends State<FishListScreen> {
             icon: Icon(Icons.more),
             onPressed: () {
               Navigator.of(context).pushNamed(
-                AuthScreen.routeName
+                ChatListScreen.routeName
               );
             },
           )

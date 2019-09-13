@@ -5,8 +5,11 @@ import './screens/fish_list_screen.dart';
 import './screens/fish_details_screen.dart';
 import './screens/chat_list_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/splash-screen.dart';
 
 import './providers/fish_provider.dart';
+import './providers/auth_provider.dart';
+import './providers/chat_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,10 +19,24 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: FishProvider(),
-        )
+          value: AuthProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, FishProvider>(
+          builder: (ctx, auth, previousFish) => FishProvider(
+            auth.token,
+            previousFish == null ? [] : previousFish.items 
+          ),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ChatProvider>(
+          builder: (ctx, auth, previousChats) => ChatProvider(
+            auth.token,
+            auth.userId,
+            previousChats == null ? [] : previousChats.items 
+          ),
+        ),
       ],
-      child: MaterialApp(
+      child: Consumer<AuthProvider>(
+        builder: (ctx, auth, _) => MaterialApp(
           title: 'MyShop',
           theme: ThemeData(
             brightness: Brightness.dark,
@@ -35,9 +52,19 @@ class MyApp extends StatelessWidget {
           home: FishListScreen(),
           routes: {
             FishDetailScreen.routeName: (ctx) => FishDetailScreen(),
-            ChatListScreen.routeName: (ctx) => ChatListScreen(),
-            AuthScreen.routeName: (ctx) => AuthScreen(),
-          }),
+            ChatListScreen.routeName: (ctx) => auth.isAuth
+              ? ChatListScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
+          }
+        ),
+      )
     );
   }
 }

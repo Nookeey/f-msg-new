@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class Chat {
   final String id;
-  final String image;
+  final String avatar;
   final String name;
-  final String message;
   final String owner;
+  final bool hasAcces;
 
   Chat({
     @required this.id,
-    @required this.image,
+    @required this.avatar,
     @required this.name,
-    @required this.message,
     @required this.owner,
+    this.hasAcces,
   });
 }

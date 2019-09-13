@@ -12,12 +12,16 @@ class FishProvider with ChangeNotifier {
     return [..._items];
   }
 
+  final String authToken;
+
+  FishProvider(this.authToken, this._items);
+
   Fish findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
   Future<void> fetchAndSetFish() async {
-    const url = 'https://fish-mgs.firebaseio.com/fish.json';
+    final url = 'https://fish-mgs.firebaseio.com/fish.json';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -36,7 +40,7 @@ class FishProvider with ChangeNotifier {
       _items = loadedFish;
       notifyListeners();
     } catch (error) {
-      throw (error);
+      // throw (error);
     }
   }
 

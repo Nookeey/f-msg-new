@@ -106,7 +106,7 @@ class _AuthCardState extends State<AuthCard> {
       var errorMessage = 'Authentication faild';
       if (e.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'The email address is already in use by another account.';
-      } else if (e.toString().contains('INVALID_PASSWORD')) { 
+      } else if (e.toString().contains('INVALID_PASSWORD')) {
         errorMessage = 'The password is invalid or the user does not have a password.';
       } else if (e.toString().contains('WEAK_PASSWORD')) {
         errorMessage = 'The password is too weak.';
@@ -120,7 +120,7 @@ class _AuthCardState extends State<AuthCard> {
       const errorMessage = 'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
     }
- 
+
     setState(() {
       _isLoading = false;
     });

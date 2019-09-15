@@ -15,8 +15,11 @@ class ChatListScreen extends StatefulWidget {
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
-
-  List<Chat> chatList = [];
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  List<Chat> _chatItems;
+  Map<String, String> _chatData = {
+    'name': '',
+  };
 
   Widget _buildChatListItem(Chat chat, index) {
     return Column(
@@ -49,17 +52,75 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return chatList;
   }
 
-  void _fetchAndSetChatList() {
-    final chatData = Provider.of<ChatProvider>(context);
-    chatData.fetchAndSetChat();
-    chatList = chatData.items;
+  void _showCreateChatDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Create new chat'),
+        content: Form(
+          key: _formKey,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: 'Chat name'),
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Chat name cannot be empty';
+                    }
+                  },
+                  onSaved: (value) {
+                    _chatData['name'] = value;
+                  },
+                )
+              )
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text('Create'),
+            onPressed: () {
+              _createNewChat();
+            },
+          )
+        ],
+      )
+    );
   }
-  
+
+ Future<void> _createNewChat() async {
+   if(!_formKey.currentState.validate()){
+     return;
+   }
+   _formKey.currentState.save();
+
+   try {
+     final _authProvider = Provider.of<AuthProvider>(context, listen: false);
+     Chat newChat = Chat(
+       id: null,
+       name: _chatData['name'],
+       owner: _authProvider.userId
+     );
+     await Provider.of<ChatProvider>(context, listen: false).addChat(newChat);
+     Navigator.of(context).pop();
+   } catch (e) {
+     print(e);
+   }
+ }
+
   @override
   Widget build(BuildContext context) {
-    final authData = Provider.of<AuthProvider>(context, listen: false);
-    // print(authData.userId);
-    _fetchAndSetChatList();
+    final _chatProvider = Provider.of<ChatProvider>(context);
+    _chatProvider.fetchAndSetChat();
+    _chatItems = _chatProvider.items;
     return Scaffold(
       appBar: AppBar(
         title: Text('Chats'),
@@ -75,21 +136,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ],
       ),
       body: Center(
-        child: _buildChatList(chatList),
+        child: _buildChatList(_chatItems),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // final newChat = Chat(
-          //   id: null,
-          //   avatar: 'avatarUrl',
-          //   name: 'Some chat 2',
-          //   owner: authData.userId,
-          // );
-          // chatData.addChat(newChat);
-          chatList.forEach((chat) {
-            print(chat.name);
-            print(chat.hasAcces);
-          });
+        onPressed: () => {
+          _showCreateChatDialog()
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.blue,

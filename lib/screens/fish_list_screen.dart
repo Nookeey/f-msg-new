@@ -7,7 +7,6 @@ import '../models/fish.dart';
 
 import '../screens/fish_details_screen.dart';
 import '../screens/chat_list_screen.dart';
-import '../screens/auth_screen.dart';
 
 class FishListScreen extends StatefulWidget {
   @override
@@ -17,10 +16,7 @@ class FishListScreen extends StatefulWidget {
 }
 
 class _FishListScreenState extends State<FishListScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  List<Fish> _fishItems;
 
   Widget _buildSomeFishCart(Fish fish, int index) {
     return Column(
@@ -61,12 +57,12 @@ class _FishListScreenState extends State<FishListScreen> {
     }
     return fishCards;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final _fishProvider = Provider.of<FishProvider>(context);
     _fishProvider.fetchAndSetFish();
-    final List<Fish> fishItems = _fishProvider.items;
+    _fishItems = _fishProvider.items;
     return Scaffold(
       appBar: AppBar(
         title: Text('Fish list'),
@@ -84,7 +80,7 @@ class _FishListScreenState extends State<FishListScreen> {
       body: Center(
         child: Container(
           padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-          child: _buildFishList(fishItems),
+          child: _buildFishList(_fishItems),
         )
       ),
     );

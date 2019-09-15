@@ -9,7 +9,7 @@ class Chat {
 
   Chat({
     @required this.id,
-    @required this.avatar,
+    this.avatar,
     @required this.name,
     @required this.owner,
     this.hasAcces,

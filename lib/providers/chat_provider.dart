@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +55,7 @@ class ChatProvider with ChangeNotifier {
       final response = await http.post(
         url,
         body: json.encode({
-          'avatar': chat.avatar,
+          'avatar': 'https://titanodrol.com/images/ingr-0.png',
           'name': chat.name,
           'owner': chat.owner,
         }),

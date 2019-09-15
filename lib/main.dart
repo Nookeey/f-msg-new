@@ -5,7 +5,7 @@ import './screens/fish_list_screen.dart';
 import './screens/fish_details_screen.dart';
 import './screens/chat_list_screen.dart';
 import './screens/auth_screen.dart';
-import './screens/splash-screen.dart';
+// import './screens/splash-screen.dart';
 
 import './providers/fish_provider.dart';
 import './providers/auth_provider.dart';
@@ -24,14 +24,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, FishProvider>(
           builder: (ctx, auth, previousFish) => FishProvider(
             auth.token,
-            previousFish == null ? [] : previousFish.items 
+            previousFish == null ? [] : previousFish.items
           ),
         ),
         ChangeNotifierProxyProvider<AuthProvider, ChatProvider>(
           builder: (ctx, auth, previousChats) => ChatProvider(
             auth.token,
             auth.userId,
-            previousChats == null ? [] : previousChats.items 
+            previousChats == null ? [] : previousChats.items
           ),
         ),
       ],
@@ -57,10 +57,11 @@ class MyApp extends StatelessWidget {
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthScreen(),
+                    AuthScreen(),
+                    // authResultSnapshot.connectionState ==
+                    //         ConnectionState.waiting
+                    //     ? AuthScreen()
+                    //     : AuthScreen(),
                 ),
           }
         ),

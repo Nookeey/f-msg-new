@@ -23,6 +23,10 @@ class ChatProvider with ChangeNotifier {
     // return _items.where((chat) => chat.usersHave == chatId).toList();
   }
 
+  Chat findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
+  }
+
   Future<void> fetchAndSetChat() async {
     final url = 'https://fish-mgs.firebaseio.com/chat.json?auth=$authToken';
     try {

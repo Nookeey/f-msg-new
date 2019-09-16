@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/chat.dart';
+
 import '../providers/auth_provider.dart';
 import '../providers/chat_provider.dart';
+
+import '../screens/chat_screen.dart';
 
 class ChatListScreen extends StatefulWidget {
   static final routeName = 'chat-list';
@@ -31,8 +34,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
           title: Text(chat.name),
           subtitle: Text('Last message'),
           onTap: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => MessagePage()));
-            // Navigator.pushNamed<bool>(context, '/message/' + chat.id);
+            Navigator.of(context).pushNamed(
+              ChatScreen.routeName,
+              arguments: chat.id
+            );
           },
         ),
       ],

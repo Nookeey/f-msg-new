@@ -59,7 +59,7 @@ class ChatProvider with ChangeNotifier {
       final response = await http.post(
         url,
         body: json.encode({
-          'avatar': 'https://titanodrol.com/images/ingr-0.png',
+          'avatar': chat.avatar,
           'name': chat.name,
           'owner': chat.owner,
         }),

@@ -6,14 +6,13 @@ import './screens/fish_details_screen.dart';
 import './screens/chat_list_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/chat_screen.dart';
+import './screens/chat_edit_screen.dart';
 // import './screens/splash-screen.dart';
 
 import './providers/fish_provider.dart';
 import './providers/auth_provider.dart';
 import './providers/chat_provider.dart';
 import './providers/message_provider.dart';
-
-import './models/chat.dart';
 
 void main() => runApp(MyApp());
 
@@ -74,7 +73,8 @@ class MyApp extends StatelessWidget {
                     //     ? AuthScreen()
                     //     : AuthScreen(),
                 ),
-            ChatScreen.routeName: (ctx) => ChatScreen()
+            ChatScreen.routeName: (ctx) => ChatScreen(),
+            ChatEditScreen.routeName: (ctx) => ChatEditScreen()
           }
         ),
       )
